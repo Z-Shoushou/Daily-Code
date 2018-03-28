@@ -1,6 +1,5 @@
 Monetary_input = float(input('Please input your Monetary: '))
 print ('Your monetary is '+ str(Monetary_input) +'.')
-discount_amount = float(0)
 #Print how much you and your friends pay for the indent
 
 def dis_amount(Monetary_input):
