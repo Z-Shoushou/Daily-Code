@@ -29,18 +29,18 @@ import pandas
 df=pandas.read_csv('residue_mass.csv') 
 residue = df.set_index('Residue_name').to_dict()['monoisotopic_mass']
 
-def scores (f_info):
-    score = 0
+def mass (f_info):
+    mass = 0
     for i in f_info :
-        score += float(residue[i])
-    return score
+        mass += float(residue[i])
+    return mass
 
-f_scores = []
+f_mass = []
 for i in fasta :
-    f_scores.append(scores(fasta[i]))
+    f_mass.append(mass(fasta[i]))
 
 f_result = dict()
-f_result = dict(zip(f_name,f_scores))   
+f_result = dict(zip(f_name,f_mass))   
 f_result.items()
     
 c=open("data1.csv","w")
