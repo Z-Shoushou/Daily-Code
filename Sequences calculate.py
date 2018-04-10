@@ -27,8 +27,7 @@ fasta = dict(zip(f_name,f_sequences))
 
 import pandas
 df=pandas.read_csv('residue_mass.csv') 
-d = df.set_index('Residue_name').to_dict()
-residue = d['monoisotopic_mass']
+residue = df.set_index('Residue_name').to_dict()['monoisotopic_mass']
 
 def scores (f_info):
     score = 0
