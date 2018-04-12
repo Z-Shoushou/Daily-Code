@@ -34,7 +34,7 @@ for index in range(len(fasta_name)) :
     sequences =dict(zip(fa_Name,fa_Seq))
     
     mark = name_in.find('.')
-    name_out = name_in[:mark] + '1.0' + name_in[mark:]
+    name_out = name_in[:mark] + '2.0' + name_in[mark:]
     fa_out = open(name_out,'w')
     for key in sequences.keys():
         fa_out.write(key + '\n' + str(sequences[key]))
