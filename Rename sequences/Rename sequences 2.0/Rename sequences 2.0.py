@@ -5,9 +5,9 @@ Created on Thu Apr 12 10:26:11 2018
 @author: 兽兽
 """
 
-fasta = ['oral.fasta','swiss prot_mouse.fasta'] #Input the name of the file you want to process.
+fasta = ['oral.fasta','swiss prot_mouse.fasta','Number'] #Input the name of the file you want to process.
 
-for index in range(len(fasta)) :
+for index in range(len(fasta)-1) :
     name_in = fasta[index]
     fa_in = open(name_in,'r')
     fa_Name = []  #Defines a list for storing information about a sequence.
@@ -23,10 +23,11 @@ for index in range(len(fasta)) :
            fa_Seq[fa_Num] = fa_Seq[fa_Num] + line
            
     Number = 1
+    C = fasta[-1]
     for index in range(len(fa_Name)) :
         Name = fa_Name[index]
         mark = Name.find(' ')
-        fa_Name[index] = Name[:4] + 'C' + str('%05d') % Number + Name[mark:]
+        fa_Name[index] = Name[:4] + C + str('%05d') % Number + Name[mark:]
         Number += 1
     
     sequences = dict()
