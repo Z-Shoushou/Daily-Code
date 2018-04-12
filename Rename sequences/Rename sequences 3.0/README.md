@@ -1,6 +1,6 @@
-# Rename sequences 2.0
-Compared to the Rename sequence 1.0 : 
-   The function of batch processing fasta file was added and the output format was file name + '2.0'.  
+# Rename sequences 3.0
+Compared to the Rename sequence 2.0 : 
+    Now all the code has been defined as a function "Rename_seq", you can use this function to change the name in the fasta file, and when the file is successfully exported, your IDE will return the string 'The name part you wanted to change has been finished'.
 How to use :
-   Put your file name and the rename character in the list named 'fasta'(You should input the rename character to the last)
-and then you'll get the file rename your file named with "2.0" and with the rename result.
+    You can use print (Rename_seq(Your_list = [])) to complete it.
+    Your list should include your fasta file names and the rename character.(You should input the rename character to the last) 
