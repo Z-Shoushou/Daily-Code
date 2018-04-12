@@ -4,7 +4,7 @@ Created on Thu Apr 12 16:31:10 2018
 
 @author: 兽兽
 """
-def Rename(fasta = []):
+def Rename_seq(fasta = []):
     for index in range(len(fasta)-1) :
         name_in = fasta[index]
         fa_in = open(name_in,'r')
@@ -39,4 +39,4 @@ def Rename(fasta = []):
     return 'The name part you wanted to change has been finished'
             
             
-print (Rename(fasta = ['oral.fasta','swiss prot_mouse.fasta','hello_hi']))
+#print (Rename_seq(fasta = ['oral.fasta','swiss prot_mouse.fasta','hello_hi']))
