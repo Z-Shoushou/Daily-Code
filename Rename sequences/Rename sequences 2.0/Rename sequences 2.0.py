@@ -5,11 +5,10 @@ Created on Thu Apr 12 10:26:11 2018
 @author: 兽兽
 """
 
-fasta = input('Please input your file name(or names): ')
-fasta_name = fasta.split(',')
+fasta = ['oral.fasta','swiss prot_mouse.fasta'] #Input the name of the file you want to process.
 
-for index in range(len(fasta_name)) :
-    name_in = fasta_name[index]
+for index in range(len(fasta)) :
+    name_in = fasta[index]
     fa_in = open(name_in,'r')
     fa_Name = []  #Defines a list for storing information about a sequence.
     fa_Seq = [] #Define a column to define a list for storing sequences.
