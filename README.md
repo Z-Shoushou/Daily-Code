@@ -1,1 +1,1 @@
-# hello-shoushou
+# hello-shoushou : Store daily code.
