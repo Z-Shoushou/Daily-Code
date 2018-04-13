@@ -5,7 +5,7 @@ Created on Fri Apr 13 11:26:18 2018
 @author: 兽兽
 """
 
-def fasta_split(fasta = []) :
+def fasta_split(fasta = []) : #Separate the name and sequence from the fasta file.
     for index in range(len(fasta)-1) :
         name_in = fasta[index]
         fa_in = open(name_in,'r')
@@ -22,7 +22,7 @@ def fasta_split(fasta = []) :
                fa_Seq[fa_Num] = fa_Seq[fa_Num] + line
         return name_in , fa_Name , fa_Seq
 
-def fasta_dic(fa_Name,fa_Seq,fasta = []) :       
+def fasta_dic(fa_Name,fa_Seq,fasta = []) : #Combines the renamed sequence name and the original sequence into a new dictionary.      
     Number = 1
     C = fasta[-1]
     for index in range(len(fa_Name)) :
@@ -34,7 +34,7 @@ def fasta_dic(fa_Name,fa_Seq,fasta = []) :
     sequences =dict(zip(fa_Name,fa_Seq))
     return sequences
     
-def fasta_out(name_in,sequences) :
+def fasta_out(name_in,sequences) : #Output the dictionary to the new fasta file.
     mark = name_in.find('.')
     name_out = name_in[:mark] + '3.1' + name_in[mark:]
     fa_out = open(name_out,'w')
@@ -42,7 +42,7 @@ def fasta_out(name_in,sequences) :
         fa_out.write(key + '\n' + str(sequences[key]))
     return 'The name part you wanted to change has been finished'
 
-def Rename_seqⅡ(fasta = []) :
+def Rename_seqⅡ(fasta = []) :  #Apply the above three functions together.
     name_in,fa_Name,fa_Seq = fasta_split.fasta
     sequences = fasta_dic(fa_Name,fa_Seq,fasta)
     fasta_out(name_in,sequences)
