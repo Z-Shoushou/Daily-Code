@@ -5,10 +5,7 @@ Created on Fri Apr 13 11:26:18 2018
 @author: 兽兽
 """
 
-def fasta_split(fasta = []) : #Separate the name and sequence from the fasta file.
-    for index in range(len(fasta)-1) :
-        name_in = fasta[index]
-        fa_in = open(name_in,'r')
+def fasta_split(fa_in) : #Separate the name and sequence from the fasta file.
         fa_Name = []  #Defines a list for storing information about a sequence.
         fa_Seq = [] #Define a column to define a list for storing sequences.
         fa_Num = -1
@@ -20,7 +17,7 @@ def fasta_split(fasta = []) : #Separate the name and sequence from the fasta fil
                fa_Seq.append("")
             else:
                fa_Seq[fa_Num] = fa_Seq[fa_Num] + line
-        return name_in , fa_Name , fa_Seq
+        return fa_Name,fa_Seq
 
 def fasta_dic(fa_Name,fa_Seq,fasta = []) : #Combines the renamed sequence name and the original sequence into a new dictionary.      
     Number = 1
@@ -42,10 +39,14 @@ def fasta_out(name_in,sequences) : #Output the dictionary to the new fasta file.
         fa_out.write(key + '\n' + str(sequences[key]))
     return 'The name part you wanted to change has been finished'
 
-def Rename_seqⅡ(fasta = []) :  #Apply the above three functions together.
-    name_in,fa_Name,fa_Seq = fasta_split.fasta
-    sequences = fasta_dic(fa_Name,fa_Seq,fasta)
-    fasta_out(name_in,sequences)
+def Rename_seqⅡ(fasta = []) :#Apply the above three functions together.
+    for index in range(len(fasta)-1) :
+        name_in = fasta[index]
+        fa_in = open(name_in,'r')
+        fa_Name,fa_Seq = fasta_split(fa_in)
+        sequences = fasta_dic(fa_Name,fa_Seq,fasta)
+        fasta_out(name_in,sequences)
             
 if __name__=='__main__':
-    print ('This is a program to change the sequence name in the fasta file.')
+    fasta = ['oral.fasta','swiss prot_mouse.fasta', 'Rename']
+    Rename_seqⅡ(fasta)
