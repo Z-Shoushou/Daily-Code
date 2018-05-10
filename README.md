@@ -1,1 +1,1 @@
-# hello-shoushou : Store daily code.
+# hello-shoushou : Store daily analysis of data python code.
