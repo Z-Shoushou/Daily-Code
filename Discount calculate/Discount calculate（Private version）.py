@@ -6,13 +6,13 @@ Created on Tue Apr 17 20:15:09 2018
 """
 
 Real_pay = float(input('Please input your Amount of real pay: '))
-Commodity_price = float(input('Pleas input your commodity price: ')) #Actual total value of goods (including lunch box fee)
+Discount_amount  = float(input('Pleas input your discount amount : ')) #Actual total value of goods (including lunch box fee)
 Box_fee = float(input('Please input your meal mox fee : '))
 Delivery_cost = float(input('Please input your delivery cost : '))
 Personal_input = input('Please input your personal consumptions(Comma separated): ').split(',')
 
 Number_people = float(len(Personal_input))
-Original_pay = Delivery_cost + Commodity_price
+Original_pay = Real_pay + Discount_amount
 Ratio = Real_pay / Original_pay
 
 for index in range(len(Personal_input)) :
