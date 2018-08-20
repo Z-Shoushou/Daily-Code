@@ -39,17 +39,22 @@ def project_judge(arguments):
     else :
         file_download(project_file)
 
-def number_handling (project_number) : # Handling the url when only got one project number.
+def number_handling (project_number) :
+    # Handling the url when only got one project number.
     url = 'https://www.ebi.ac.uk/pride/ws/archive/file/list/project/' + str(project_number)
     return url
 
 def number_download(project_number):
     url = number_handling(project_number)
+    folder = urls[i][-9:]
+    mkpath = "C:/Users/Shoushou/biostar/aspera/" + folder
+    mkdir(mkpath)
     DownloadLink = get_link(url)
-    cmd = tansform(DownloadLink)
+    cmd = tansform(DownloadLink,mkpath)
     command_download(cmd)
 
-def file_handling (project_file):  # Handling the url when got a project number file
+def file_handling (project_file):
+    # Handling the url when got a project number file
     project_list = []
     with open(project_file) as f:
         for line in f:
@@ -63,10 +68,23 @@ def file_download(project_file) :
     urls = file_handling(project_file)
     for i in range(len(urls)):
         print("Beginning download the project " + urls[i][-9:] + " file.")
+        folder = urls[i][-9:]
+        mkpath = "C:/Users/Shoushou/biostar/aspera/"+ folder
+        mkdir(mkpath)
         DownloadLink = get_link(urls[i])
-        cmd = tansform(DownloadLink)
+        cmd = tansform(DownloadLink,folder)
         command_download(cmd)
         print ("Project " + urls[i][-9:] + " download has been finished.")
+
+def mkdir(path):
+    isExists = os.path.exists(path)
+    if not isExists:
+        print (path + ' creating successfully')
+        os.makedirs(path)
+        return True
+    else:
+        print(path + ' directory exists')
+        return False
 
 def get_link (url):
     # From the project number the user input get the download link.
@@ -80,17 +98,18 @@ def get_link (url):
     print("Web data ande download link have been handed.")
     return DownloadLink
 
-def tansform (DownloadLink):
+def tansform (DownloadLink,floder):
     # Transform the link into windows cmd commend.
     print ("Getting the download command prompt...")
     for i in range(len(DownloadLink)):
-        combine = parameter + DownloadLink[i] + " " + Store_address
+        combine = parameter + "\""+ DownloadLink[i] + "\"" + " " + Store_address + str(floder)
         cmd.append(combine)
     print ("The download command prompt has been finished.")
     return cmd
 
 def command_download (cmd) :
     for i in range(len(cmd)) :
+        print (cmd[i])
         os.system(cmd[i])
 
 if __name__ == '__main__':
