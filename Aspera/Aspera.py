@@ -25,6 +25,7 @@ from docopt import docopt
 import requests
 import json as js
 import os
+from retrying import retry
 
 parameter = r"ascp -QT -l 500m -P33001 -i C:/Users/Shoushou/ssh.ssh/asperaweb_id_dsa.openssh "
 Store_address = "C:/Users/Shoushou/biostar/aspera/"
@@ -47,7 +48,7 @@ def number_handling (project_number) :
 def number_download(project_number):
     url = number_handling(project_number)
     folder = urls[i][-9:]
-    mkpath = "C:/Users/Shoushou/biostar/aspera/" + folder
+    mkpath = Store_address + folder
     mkdir(mkpath)
     DownloadLink = get_link(url)
     cmd = tansform(DownloadLink,mkpath)
@@ -69,7 +70,7 @@ def file_download(project_file) :
     for i in range(len(urls)):
         print("Beginning download the project " + urls[i][-9:] + " file.")
         folder = urls[i][-9:]
-        mkpath = "C:/Users/Shoushou/biostar/aspera/"+ folder
+        mkpath = Store_address+ folder
         mkdir(mkpath)
         DownloadLink = get_link(urls[i])
         cmd = tansform(DownloadLink,folder)
@@ -110,7 +111,26 @@ def tansform (DownloadLink,floder):
 def command_download (cmd) :
     for i in range(len(cmd)) :
         print (cmd[i])
-        os.system(cmd[i])
+        print ("Downloading project file...")
+        output = os.popen(cmd[i], "r")
+        note = str(output.read())
+        print (note)
+        if "Session Stop" in note:
+            print("Stopping after 5 attempts")
+            stop_after_5_attempts()
+
+@retry(stop_max_attempt_number=5)
+def stop_after_5_attempts():
+    output = os.popen(cmd, "r")
+    note = str(output.read())
+    print(note)
+    if "Session Stop" in note:
+        with open(Store_address + "Error note.txt", "w") as f:
+            f.write(cmd)
+            f.write(note)
+            f.write("\n")
+        raise Exception("File download retry fail")
+    print ("retry successfully")
 
 if __name__ == '__main__':
     arguments = docopt(__doc__)
