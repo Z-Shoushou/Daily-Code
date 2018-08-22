@@ -25,7 +25,6 @@ from docopt import docopt
 import requests
 import json as js
 import os
-from retrying import retry
 
 parameter = r"ascp -QT -l 500m -P33001 -i C:/Users/Shoushou/ssh.ssh/asperaweb_id_dsa.openssh "
 Store_address = "C:/Users/Shoushou/biostar/aspera/"
