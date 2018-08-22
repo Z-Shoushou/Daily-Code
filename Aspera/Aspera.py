@@ -117,22 +117,33 @@ def command_download (cmd) :
         print (note)
         if "Session Stop" in note:
             print("Stopping after 5 attempts")
-            stop_after_5_attempts()
+            stop_after_5_attempts(cmd[i])
 
-@retry(stop_max_attempt_number=5)
-def stop_after_5_attempts():
+def stop_after_5_attempts(cmd):
     output = os.popen(cmd, "r")
     note = str(output.read())
     print(note)
     if "Session Stop" in note:
-        with open(Store_address + "Error note.txt", "w") as f:
-            f.write(cmd)
-            f.write(note)
-            f.write("\n")
-        raise Exception("File download retry fail")
-    print ("retry successfully")
+        for i in range(4):
+            while "Session Stop" in note:
+                try:
+                    number = i + 2
+                    print("Retrying the " + str(number) + " time download")
+                    output = os.popen(cmd, "r")
+                    note = output.read()
+                    print(note)
+                    if i == 3:
+                        with open(Store_address + str(floder) + " Error note.txt", "w") as f:
+                            f.write(cmd)
+                            f.write(note)
+                            f.write("\n")
+                except Exception:
+                    continue
+                break
+    print ("Retry download successfully")
 
 if __name__ == '__main__':
     arguments = docopt(__doc__)
-    file_type = arguments['--type']
+    file_type = arguments['--type'].upper()
+    print (file_type)
     project_judge(arguments)
