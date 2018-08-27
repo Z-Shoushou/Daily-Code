@@ -46,9 +46,14 @@ def number_handling (project_number) :
 
 def number_download(project_number):
     url = number_handling(project_number)
+    print("Beginning download the project " + url[-9:] + " file.")
+    folder = url[-9:]
+    mkpath = Store_address + folder
+    mkdir(mkpath)
     DownloadLink = get_link(url)
-    cmd = tansform(DownloadLink)
+    cmd = tansform(DownloadLink,folder)
     command_download(cmd)
+    print("Project " + url[-9:] + " download has been finished.")
 
 def file_handling (project_file):
     # Handling the url when got a project number file
@@ -65,10 +70,23 @@ def file_download(project_file) :
     urls = file_handling(project_file)
     for i in range(len(urls)):
         print("Beginning download the project " + urls[i][-9:] + " file.")
+        folder = urls[i][-10:]
+        mkpath = Store_address+ folder
+        mkdir(mkpath)
         DownloadLink = get_link(urls[i])
-        cmd = tansform(DownloadLink)
+        cmd = tansform(DownloadLink,folder)
         command_download(cmd)
         print ("Project " + urls[i][-9:] + " download has been finished.")
+
+def mkdir(path):
+    isExists = os.path.exists(path)
+    if not isExists:
+        print (path + ' creating successfully')
+        os.makedirs(path)
+        return True
+    else:
+        print(path + ' directory exists')
+        return False
 
 def get_link (url):
     # From the project number the user input get the download link.
@@ -82,11 +100,11 @@ def get_link (url):
     print("Web data ande download link have been handed.")
     return DownloadLink
 
-def tansform (DownloadLink):
+def tansform (DownloadLink,floder):
     # Transform the link into windows cmd commend.
     print ("Getting the download command prompt...")
     for i in range(len(DownloadLink)):
-        combine = parameter + DownloadLink[i] + " " + Store_address
+        combine = parameter + "\""+ DownloadLink[i] + "\"" + " " + Store_address + str(floder)
         cmd.append(combine)
     print ("The download command prompt has been finished.")
     return cmd
@@ -94,9 +112,39 @@ def tansform (DownloadLink):
 def command_download (cmd) :
     for i in range(len(cmd)) :
         print (cmd[i])
-        os.system(cmd[i])
+        print ("Downloading project file...")
+        output = os.popen(cmd[i], "r")
+        note = str(output.read())
+        print (note)
+        if "Session Stop" in note:
+            print("Stopping after 5 attempts")
+            stop_after_5_attempts(cmd[i])
+
+def stop_after_5_attempts(cmd):
+    output = os.popen(cmd, "r")
+    note = str(output.read())
+    print(note)
+    if "Session Stop" in note:
+        for i in range(4):
+            while "Session Stop" in note:
+                try:
+                    number = i + 2
+                    print("Retrying the " + str(number) + " time download")
+                    output = os.popen(cmd, "r")
+                    note = output.read()
+                    print(note)
+                    if i == 3:
+                        with open(Store_address + str(floder) + " Error note.txt", "w") as f:
+                            f.write(cmd)
+                            f.write(note)
+                            f.write("\n")
+                except Exception:
+                    continue
+                break
+    print ("Retry download successfully")
 
 if __name__ == '__main__':
     arguments = docopt(__doc__)
-    file_type = arguments['--type']
+    file_type = arguments['--type'].upper()
+    print (file_type)
     project_judge(arguments)
