@@ -26,7 +26,7 @@ import requests
 import json as js
 import os
 
-parameter = r"ascp -QT -l 500m -P33001 -i C:/Users/Shoushou/ssh.ssh/asperaweb_id_dsa.openssh "
+parameter = r"ascp -QT -l 500m -P33001 -i C:/Users/Shoushou/ssh.ssh/asperaweb_id_dsa.openssh"
 Store_address = "C:/Users/Shoushou/biostar/aspera/"
 DownloadLink = []
 cmd = []
@@ -104,7 +104,7 @@ def tansform (DownloadLink,floder):
     # Transform the link into windows cmd commend.
     print ("Getting the download command prompt...")
     for i in range(len(DownloadLink)):
-        combine = parameter + "\""+ DownloadLink[i] + "\"" + " " + Store_address + str(floder)
+        combine = parameter + " \""+ DownloadLink[i] + "\"" + " " + Store_address + str(floder)
         cmd.append(combine)
     print ("The download command prompt has been finished.")
     return cmd
@@ -139,7 +139,7 @@ def stop_after_5_attempts(cmd):
                             f.write(note)
                             f.write("\n")
                 except Exception:
-                    continue
+                    break
                 break
     print ("Retry download successfully")
 
