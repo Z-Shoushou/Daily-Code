@@ -28,10 +28,11 @@ import os
 
 parameter = r"ascp -QT -l 500m -P33001 -i C:/Users/Shoushou/ssh.ssh/asperaweb_id_dsa.openssh"
 Store_address = "C:/Users/Shoushou/biostar/aspera/"
-DownloadLink = []
-cmd = []
+DownloadLink = [] # Store the pride file's aspera download link .
+cmd = [] # Store the aspera system download command .
 
 def project_judge(arguments):
+    # Identify the project as a single or document form and implement different solutions.
     project_number = arguments['--number']
     project_file = arguments['--file']
     if type(project_number) == type("abc"):
@@ -45,10 +46,11 @@ def number_handling (project_number) :
     return url
 
 def number_download(project_number):
+    # Download the data when only got one project number.
     url = number_handling(project_number)
     print("Beginning download the project " + url[-9:] + " file.")
-    folder = url[-9:]
-    mkpath = Store_address + folder
+    folder = url[-9:] # Project number
+    mkpath = Store_address + folder # The folder address where the file is stored
     mkdir(mkpath)
     DownloadLink = get_link(url)
     cmd = tansform(DownloadLink,folder)
@@ -56,7 +58,7 @@ def number_download(project_number):
     print("Project " + url[-9:] + " download has been finished.")
 
 def file_handling (project_file):
-    # Handling the url when got a project number file
+    # Handling the url when got a project number file .
     project_list = []
     with open(project_file) as f:
         for line in f:
@@ -67,6 +69,7 @@ def file_handling (project_file):
     return project_list
 
 def file_download(project_file) :
+    # Download the data when only got a project number file .
     urls = file_handling(project_file)
     for i in range(len(urls)):
         print("Beginning download the project " + urls[i][-9:] + " file.")
@@ -79,6 +82,7 @@ def file_download(project_file) :
         print ("Project " + urls[i][-9:] + " download has been finished.")
 
 def mkdir(path):
+    # Make the dir for each project and store the data file in it .
     isExists = os.path.exists(path)
     if not isExists:
         print (path + ' creating successfully')
@@ -110,6 +114,7 @@ def tansform (DownloadLink,floder):
     return cmd
 
 def command_download (cmd) :
+    # Visit the system command line use Aspera to download the data .
     for i in range(len(cmd)) :
         print (cmd[i])
         print ("Downloading project file...")
@@ -121,6 +126,7 @@ def command_download (cmd) :
             stop_after_5_attempts(cmd[i])
 
 def stop_after_5_attempts(cmd):
+    # When get the fail download try five times to redownload .
     output = os.popen(cmd, "r")
     note = str(output.read())
     print(note)
