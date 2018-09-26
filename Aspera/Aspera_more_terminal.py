@@ -60,7 +60,6 @@ def number_download(project_number):
     print("Project " + url[-9:] + " download has been finished.")
     print("Start remote copy to your prescribed route. ")
     remote_copy(folder, remote_path)
-    print("Prescribed route successfully.")
 
 def file_handling (project_file):
     # Handling the url when got a project number file .
@@ -87,7 +86,6 @@ def file_download(project_file) :
         print ("Project " + urls[i][-9:] + " download has been finished.")
         print("Start remote copy to your prescribed route. ")
         remote_copy(folder, remote_path)
-        print("Prescribed route successfully.")
 
 def mkdir(path):
     # Make the dir for each project and store the data file in it .
@@ -162,6 +160,7 @@ def re_download(cmd,floder):
 
 def remote_copy(folder,remote_path):
     os.popen("scp -r " + folder + " " + remote_path)
+    print("Prescribed route successfully.")
 
 if __name__ == '__main__':
     arguments = docopt(__doc__)

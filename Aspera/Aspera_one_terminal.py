@@ -152,7 +152,6 @@ def re_download(cmd,floder):
         except Exception:
             break
 
-
 if __name__ == '__main__':
     arguments = docopt(__doc__)
     file_type = arguments['--type'].upper()
