@@ -73,7 +73,7 @@ def file_download(project_file) :
     urls = file_handling(project_file)
     for i in range(len(urls)):
         print("Beginning download the project " + urls[i][-9:] + " file.")
-        folder = urls[i][-10:]
+        folder = urls[i][-9:]
         mkpath = Store_address+ folder
         mkdir(mkpath)
         DownloadLink = get_link(urls[i])
