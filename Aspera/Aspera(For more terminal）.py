@@ -132,7 +132,6 @@ def command_download (cmd,floder) :
         if "Session Stop" in note:
             print("Trying download the data again(A hundred times at most).")
             re_download(cmd[i],floder)
-            print("Stop the re-download.")
 
 def re_download(cmd,floder):
     # When get the fail download try five times to re_download .
@@ -157,12 +156,9 @@ def re_download(cmd,floder):
                     f.write(note)
                     f.write("\n")
         except Exception:
-            print (Exception)
-            with open(Store_address + str(floder) + " Error note.txt", "w") as f:
-                f.write(cmd)
-                f.write(note)
-                f.write("\n")
             break
+        else :
+            print ("Have been re_download the file successfully." )
 
 def remote_copy(folder,remote_path):
     os.popen("scp -r " + folder + " " + remote_path)
