@@ -158,7 +158,7 @@ def re_download(cmd,floder):
         except Exception:
             break
         else :
-            print ("Have been re_download the file successfully." )
+            break
 
 def remote_copy(folder,remote_path):
     os.popen("scp -r " + folder + " " + remote_path)

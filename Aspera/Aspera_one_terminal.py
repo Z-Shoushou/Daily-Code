@@ -150,11 +150,6 @@ def re_download(cmd,floder):
                     f.write(note)
                     f.write("\n")
         except Exception:
-            print (Exception)
-            with open(Store_address + str(floder) + " Error note.txt", "w") as f:
-                f.write(cmd)
-                f.write(note)
-                f.write("\n")
             break
 
 
