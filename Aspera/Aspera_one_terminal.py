@@ -26,11 +26,13 @@ import requests
 import json as js
 import os
 import time
+import math
 
-parameter = r"ascp -QT -l 500m -P33001 -i C:/Users/Shoushou/ssh.ssh/asperaweb_id_dsa.openssh"
-Store_address = "C:/Users/Shoushou/biostar/aspera/"
+parameter = r"/usr/zhanghf/.aspera/connect/bin/ascp -QT -l 500m -P33001 -i  /usr/zhanghf/.aspera/connect/etc/asperaweb_id_dsa.openssh"
+Store_address = "./"
 DownloadLink = [] # Store the pride file's aspera download link .
 cmd = [] # Store the aspera system download command .
+FileSize = [] # Store the file size in the project file.
 
 def project_judge(arguments):
     # Identify the project as a single or document form and implement different solutions.
@@ -50,13 +52,14 @@ def number_download(project_number):
     # Download the data when only got one project number.
     url = number_handling(project_number)
     print("Beginning download the project " + url[-9:] + " file.")
-    folder = url[-9:] # Project number
-    mkpath = Store_address + folder # The folder address where the file is stored
+    floder = url[-9:] # Project number
+    mkpath = Store_address + floder # The floder address where the file is stored
     mkdir(mkpath)
     DownloadLink = get_link(url)
-    cmd = tansform(DownloadLink,folder)
-    command_download(cmd,folder)
+    cmd = tansform(DownloadLink,floder)
+    command_download(cmd,floder)
     print("Project " + url[-9:] + " download has been finished.")
+    print("Start remote copy to your prescribed route. ")
 
 def file_handling (project_file):
     # Handling the url when got a project number file .
@@ -74,13 +77,14 @@ def file_download(project_file) :
     urls = file_handling(project_file)
     for i in range(len(urls)):
         print("Beginning download the project " + urls[i][-9:] + " file.")
-        folder = urls[i][-9:]
-        mkpath = Store_address+ folder
+        floder = urls[i][-9:]
+        mkpath = Store_address+ floder
         mkdir(mkpath)
         DownloadLink = get_link(urls[i])
-        cmd = tansform(DownloadLink,folder)
-        command_download(cmd,folder)
+        cmd = tansform(DownloadLink,floder)
+        command_download(cmd,floder)
         print ("Project " + urls[i][-9:] + " download has been finished.")
+        print("Start remote copy to your prescribed route. ")
 
 def mkdir(path):
     # Make the dir for each project and store the data file in it .
@@ -102,6 +106,7 @@ def get_link (url):
         type = data_1[i]['fileType']
         if type in file_type :
             DownloadLink.append(data_1[i]['asperaDownloadLink'])
+            FileSize.append(data_1[i]['fileSize'])
     print("Web data ande download link have been handed.")
     return DownloadLink
 
@@ -118,6 +123,9 @@ def command_download (cmd,floder) :
     # Visit the system command line use Aspera to download the data .
     for i in range(len(cmd)) :
         print (cmd[i])
+        size = float(FileSize[i])
+        print ("Estimate transmission completion in " + str(math.ceil(size/21000000)) + " seconds.(Start time : "
+               + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ")")
         print ("Downloading project file...")
         output = os.popen(cmd[i], "r")
         note = str(output.read())
@@ -125,7 +133,6 @@ def command_download (cmd,floder) :
         if "Session Stop" in note:
             print("Trying download the data again(A hundred times at most).")
             re_download(cmd[i],floder)
-            print("Stop the re-download.")
 
 def re_download(cmd,floder):
     # When get the fail download try five times to re_download .
@@ -136,7 +143,7 @@ def re_download(cmd,floder):
     number = 1
     while "Session Stop" in note:
         try:
-            time.sleep(20)
+            time.sleep(50)
             number += 1
             print("Retrying the " + str(number) + " time re-download")
             output = os.popen(cmd, "r")
