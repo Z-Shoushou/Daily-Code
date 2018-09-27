@@ -49,7 +49,7 @@ def number_handling (project_number) :
     return url
 
 def number_download(project_number):
-    # Download the data when only got one project number.
+    # Download the data when only got one project number .
     url = number_handling(project_number)
     print("Beginning download the project " + url[-9:] + " file.")
     floder = url[-9:] # Project number

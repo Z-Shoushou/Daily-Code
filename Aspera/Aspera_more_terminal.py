@@ -32,7 +32,7 @@ parameter = r"/usr/zhanghf/.aspera/connect/bin/ascp -QT -l 500m -P33001 -i  /usr
 Store_address = "./"
 remote_path = "namenode:/data/download_pride/"
 DownloadLink = [] # Store the pride file's aspera download link .
-cmd = [] # Store the aspera system download command .
+cmd = [] # Store the aspera system download command  .
 FileSize = [] # Store the file size in the project file.
 
 def project_judge(arguments):
