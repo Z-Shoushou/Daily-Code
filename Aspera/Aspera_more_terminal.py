@@ -31,9 +31,6 @@ import math
 parameter = r"/usr/zhanghf/.aspera/connect/bin/ascp -QT -l 500m -P33001 -i  /usr/zhanghf/.aspera/connect/etc/asperaweb_id_dsa.openssh"
 Store_address = "./"
 remote_path = "namenode:/data/download_pride/"
-DownloadLink = [] # Store the pride file's aspera download link .
-cmd = [] # Store the aspera system download command  .
-FileSize = [] # Store the file size in the project file.
 
 def project_judge(arguments):
     # Identify the project as a single or document form and implement different solutions.
@@ -69,10 +66,11 @@ def file_handling (project_file):
     project_list = []
     with open(project_file) as f:
         for line in f:
-            list = line.split(',')
+            list = line.split('\t')
             for i in range(len(list)):
-                url = 'https://www.ebi.ac.uk/pride/ws/archive/file/list/project/' + str(list[i])
-                project_list.append(url)
+                if len(line) != 1 :
+                    url = 'https://www.ebi.ac.uk/pride/ws/archive/file/list/project/' + str(list[i])
+                    project_list.append(url)
     return project_list
 
 def file_download(project_file) :
@@ -83,28 +81,28 @@ def file_download(project_file) :
         floder = urls[i][-10:-1]
         mkpath = Store_address+ floder
         mkdir(mkpath)
-        DownloadLink = get_link(urls[i])
+        DownloadLink,FileSize = get_link(urls[i])
         cmd = tansform(DownloadLink,floder)
-        command_download(cmd,floder)
-        print ("Project " + urls[i][-10:-1] + " download has been finished.")
-        print("Start remote copy to your prescribed route. ")
+        command_download(cmd,floder,FileSize)
+        print ("Project " + urls[i][-10:-1] + " download has been finished.\n")
         remote_copy(floder, remote_path)
-        print("Prescribed route successfully.")
 
 def mkdir(path):
     # Make the dir for each project and store the data file in it .
     isExists = os.path.exists(path)
     if not isExists:
-        print (path + ' creating successfully')
+        print (path + ' creating successfully.\n')
         os.makedirs(path)
         return True
     else:
-        print(path + ' directory exists')
+        print(path + ' directory exists.\n')
         return False
 
 def get_link (url):
     # From the project number the user input get the download link.
     print('Handing web data and get the download link...')
+    DownloadLink = []
+    FileSize=[]
     wbdata = js.loads(requests.get(url).text)
     data_1 = wbdata["list"]
     for i in range(len(data_1)) :
@@ -113,31 +111,32 @@ def get_link (url):
             DownloadLink.append(data_1[i]['asperaDownloadLink'])
             FileSize.append(data_1[i]['fileSize'])
     print("Web data ande download link have been handed.")
-    return DownloadLink
+    return DownloadLink,FileSize
 
 def tansform (DownloadLink,floder):
     # Transform the link into windows cmd commend.
     print ("Getting the download command prompt...")
+    cmd = []
     for i in range(len(DownloadLink)):
         combine = parameter + " \""+ DownloadLink[i] + "\"" + " " + Store_address + str(floder)
         cmd.append(combine)
-    print ("The download command prompt has been finished.")
+    print ("The download command prompt has been finished.\n")
     return cmd
 
-def command_download (cmd,floder) :
+def command_download (cmd,floder,FileSize) :
     # Visit the system command line use Aspera to download the data .
-    for i in range(len(cmd)) :
-        print (cmd[i])
-        size = float(FileSize[i])
+    for (i,j) in zip(cmd,FileSize) :
+        print (i)
+        size = float(j)
         print ("Estimate transmission completion in " + str(math.ceil(size/21000000)) + " seconds.(Start time : "
                + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ")")
         print ("Downloading project file...")
-        output = os.popen(cmd[i], "r")
+        output = os.popen(i, "r")
         note = str(output.read())
         print (note)
         if "Session Stop" in note:
             print("Trying download the data again(A hundred times at most).")
-            re_download(cmd[i],floder)
+            re_download(i,floder)
 
 def re_download(cmd,floder):
     # When get the fail download try five times to re_download .
@@ -165,7 +164,9 @@ def re_download(cmd,floder):
             break
 
 def remote_copy(floder,remote_path):
-    os.popen("scp -r " + floder + "/ " + remote_path)
+    print("Start remote copy to your prescribed route. ")
+    os.popen("rsync -avzu --progress " + floder + "/ " + remote_path)
+    print("Prescribed route successfully.")
 
 if __name__ == '__main__':
     arguments = docopt(__doc__)
