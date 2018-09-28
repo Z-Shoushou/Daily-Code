@@ -165,7 +165,8 @@ def re_download(cmd,floder):
 
 def remote_copy(floder,remote_path):
     print("Start remote copy to your prescribed route. ")
-    os.popen("rsync -avzu --progress " + floder + "/ " + remote_path)
+    print("rsync -avzu --progress " + str(floder) + " " + str(remote_path))
+    os.popen("rsync -avzu --progress " + floder + " " + remote_path)
     print("Prescribed route successfully.")
 
 if __name__ == '__main__':
