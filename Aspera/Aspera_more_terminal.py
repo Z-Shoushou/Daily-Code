@@ -51,11 +51,11 @@ def number_download(project_number):
     url = number_handling(project_number)
     print("Beginning download the project " + url[-9:] + " file.")
     floder = url[-9:] # Project number
-    mkpath = Store_address + floder # The floder address where the file is stored
+    mkpath = Store_address + floder  # The floder address where the file is stored
     mkdir(mkpath)
-    DownloadLink = get_link(url)
-    cmd = tansform(DownloadLink,floder)
-    command_download(cmd,floder)
+    DownloadLink,FileSize = get_link(url)
+    cmd = tansform(DownloadLink, floder)
+    command_download(cmd, floder, FileSize)
     print("Project " + url[-9:] + " download has been finished.")
     print("Start remote copy to your prescribed route. ")
     remote_copy(floder, remote_path)
@@ -82,16 +82,16 @@ def file_download(project_file) :
         mkpath = Store_address+ floder
         mkdir(mkpath)
         DownloadLink,FileSize = get_link(urls[i])
-        cmd = tansform(DownloadLink,floder)
-        command_download(cmd,floder,FileSize)
-        print ("Project " + urls[i][-10:-1] + " download has been finished.\n")
+        cmd = tansform(DownloadLink, floder)
+        command_download(cmd, floder, FileSize)
+        print("Project " + urls[i][-10:-1] + " download has been finished.\n")
         remote_copy(floder, remote_path)
 
 def mkdir(path):
     # Make the dir for each project and store the data file in it .
     isExists = os.path.exists(path)
     if not isExists:
-        print (path + ' creating successfully.\n')
+        print(path + ' creating successfully.\n')
         os.makedirs(path)
         return True
     else:
@@ -102,7 +102,7 @@ def get_link (url):
     # From the project number the user input get the download link.
     print('Handing web data and get the download link...')
     DownloadLink = []
-    FileSize=[]
+    FileSize = []
     wbdata = js.loads(requests.get(url).text)
     data_1 = wbdata["list"]
     for i in range(len(data_1)) :
@@ -115,18 +115,18 @@ def get_link (url):
 
 def tansform (DownloadLink,floder):
     # Transform the link into windows cmd commend.
-    print ("Getting the download command prompt...")
+    print("Getting the download command prompt...")
     cmd = []
     for i in range(len(DownloadLink)):
-        combine = parameter + " \""+ DownloadLink[i] + "\"" + " " + Store_address + str(floder)
+        combine = parameter + " \"" + DownloadLink[i] + "\"" + " " + Store_address + str(floder)
         cmd.append(combine)
-    print ("The download command prompt has been finished.\n")
+    print("The download command prompt has been finished.\n")
     return cmd
 
 def command_download (cmd,floder,FileSize) :
     # Visit the system command line use Aspera to download the data .
-    for (i,j) in zip(cmd,FileSize) :
-        print (i)
+    for (i, j) in zip(cmd, FileSize):
+        print(i)
         size = float(j)
         print ("Estimate transmission completion in " + str(math.ceil(size/21000000)) + " seconds.(Start time : "
                + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ")")
@@ -136,7 +136,7 @@ def command_download (cmd,floder,FileSize) :
         print (note)
         if "Session Stop" in note:
             print("Trying download the data again(A hundred times at most).")
-            re_download(i,floder)
+            re_download(i, floder)
 
 def re_download(cmd,floder):
     # When get the fail download try five times to re_download .
@@ -154,8 +154,8 @@ def re_download(cmd,floder):
             note = output.read()
             print(note)
             if number == 100:
-                print ("Have been retried for 100 times,re-download fail. "
-                       "Fail download note had been wrote in Error note.txt")
+                print("Have been retried for 100 times,re-download fail. "
+                      "Fail download note had been wrote in Error note.txt")
                 with open(Store_address + str(floder) + " Error note.txt", "w") as f:
                     f.write(cmd)
                     f.write(note)
