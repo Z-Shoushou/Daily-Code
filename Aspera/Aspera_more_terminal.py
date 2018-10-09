@@ -28,7 +28,7 @@ import os
 import time
 import math
 
-parameter = r"/usr/zhanghf/.aspera/connect/bin/ascp -QT -l 500m -P33001 -i  /usr/zhanghf/.aspera/connect/etc/asperaweb_id_dsa.openssh"
+parameter = r"nohup /usr/zhanghf/.aspera/connect/bin/ascp -QT -l 500m -k1 -P33001 -i  /usr/zhanghf/.aspera/connect/etc/asperaweb_id_dsa.openssh"
 Store_address = "./"
 remote_path = "namenode:/data/download_pride/"
 
@@ -57,9 +57,7 @@ def number_download(project_number):
     cmd = tansform(DownloadLink, floder)
     command_download(cmd, floder, FileSize)
     print("Project " + url[-9:] + " download has been finished.")
-    print("Start remote copy to your prescribed route. ")
     remote_copy(floder, remote_path)
-    print("Prescribed route successfully.")
 
 def file_handling (project_file):
     # Handling the url when got a project number file .
@@ -118,7 +116,7 @@ def tansform (DownloadLink,floder):
     print("Getting the download command prompt...")
     cmd = []
     for i in range(len(DownloadLink)):
-        combine = parameter + " \"" + DownloadLink[i] + "\"" + " " + Store_address + str(floder)
+        combine = parameter + " \"" + DownloadLink[i] + "\"" + " " + Store_address + str(floder) + " &"
         cmd.append(combine)
     print("The download command prompt has been finished.\n")
     return cmd
@@ -128,7 +126,7 @@ def command_download (cmd,floder,FileSize) :
     for (i, j) in zip(cmd, FileSize):
         print(i)
         size = float(j)
-        print ("Estimate transmission completion in " + str(math.ceil(size/21000000)) + " seconds.(Start time : "
+        print ("Estimate transmission completion in " + str(math.ceil(size/2100000)) + " seconds.(Start time : "
                + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ")")
         print ("Downloading project file...")
         output = os.popen(i, "r")
@@ -147,7 +145,7 @@ def re_download(cmd,floder):
     number = 1
     while "Session Stop" in note:
         try:
-            time.sleep(50)
+            time.sleep(40)
             number += 1
             print("Retrying the " + str(number) + " time re-download")
             output = os.popen(cmd, "r")

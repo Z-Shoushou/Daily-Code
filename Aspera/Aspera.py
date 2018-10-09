@@ -26,7 +26,7 @@ import requests
 import json as js
 import os
 
-parameter = r"ascp -QT -l 500m -P33001 -i C:/Users/Shoushou/ssh.ssh/asperaweb_id_dsa.openssh"
+parameter = r"ascp -QT -l 500m -k1 -P33001 -i C:/Users/Shoushou/ssh.ssh/asperaweb_id_dsa.openssh"
 Store_address = "C:/Users/Shoushou/biostar/aspera/"
 DownloadLink = [] # Store the pride file's aspera download link .
 cmd = [] # Store the aspera system download command .
