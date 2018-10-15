@@ -31,6 +31,7 @@ Store_address = "C:/Users/Shoushou/biostar/aspera/"
 DownloadLink = [] # Store the pride file's aspera download link .
 cmd = [] # Store the aspera system download command .
 
+
 def project_judge(arguments):
     # Identify the project as a single or document form and implement different solutions.
     project_number = arguments['--number']
@@ -40,10 +41,12 @@ def project_judge(arguments):
     else :
         file_download(project_file)
 
+
 def number_handling (project_number) :
     # Handling the url when only got one project number.
     url = 'https://www.ebi.ac.uk/pride/ws/archive/file/list/project/' + str(project_number)
     return url
+
 
 def number_download(project_number):
     # Download the data when only got one project number.
@@ -57,6 +60,7 @@ def number_download(project_number):
     command_download(cmd)
     print("Project " + url[-9:] + " download has been finished.")
 
+
 def file_handling (project_file):
     # Handling the url when got a project number file .
     project_list = []
@@ -67,6 +71,7 @@ def file_handling (project_file):
                 url = 'https://www.ebi.ac.uk/pride/ws/archive/file/list/project/' + str(list[i])
                 project_list.append(url)
     return project_list
+
 
 def file_download(project_file) :
     # Download the data when only got a project number file .
@@ -81,6 +86,7 @@ def file_download(project_file) :
         command_download(cmd)
         print ("Project " + urls[i][-9:] + " download has been finished.")
 
+
 def mkdir(path):
     # Make the dir for each project and store the data file in it .
     isExists = os.path.exists(path)
@@ -91,6 +97,7 @@ def mkdir(path):
     else:
         print(path + ' directory exists')
         return False
+
 
 def get_link (url):
     # From the project number the user input get the download link.
@@ -104,6 +111,7 @@ def get_link (url):
     print("Web data ande download link have been handed.")
     return DownloadLink
 
+
 def tansform (DownloadLink,floder):
     # Transform the link into windows cmd commend.
     print ("Getting the download command prompt...")
@@ -112,6 +120,7 @@ def tansform (DownloadLink,floder):
         cmd.append(combine)
     print ("The download command prompt has been finished.")
     return cmd
+
 
 def command_download (cmd) :
     # Visit the system command line use Aspera to download the data .
@@ -124,6 +133,7 @@ def command_download (cmd) :
         if "Session Stop" in note:
             print("Stopping after 5 attempts")
             stop_after_5_attempts(cmd[i])
+
 
 def stop_after_5_attempts(cmd):
     # When get the fail download try five times to redownload .
@@ -148,6 +158,7 @@ def stop_after_5_attempts(cmd):
                     break
                 break
     print ("Retry download successfully")
+
 
 if __name__ == '__main__':
     arguments = docopt(__doc__)

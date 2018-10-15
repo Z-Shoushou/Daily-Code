@@ -1,7 +1,8 @@
 import requests
 import json as js
 
-def filtrate_ID (url) :  #used to filter the ID of the condition in the json text ("submissionType": "COMPLETE")
+
+def filtrate_ID (url) :  # used to filter the ID of the condition in the json text ("submissionType": "COMPLETE")
     print('Handing web data...')
     wbdata = js.loads(requests.get(url).text)
     data_1 = wbdata['list']
@@ -12,7 +13,9 @@ def filtrate_ID (url) :  #used to filter the ID of the condition in the json tex
     print ('Completion ID filtering.')
     return (accession_id)
 
-def filtrate_Link (accession_id) :   #used to filter the FTTP link in a link that has been expanded by an ID that matches the criteria in the previous function ("fileType": "RESULT").
+
+def filtrate_Link (accession_id) :   # used to filter the FTTP link in a link that has been expanded by an ID that
+    # matches the criteria in the previous function ("fileType": "RESULT").
     print ('Selecting the FTP link...')
     with open('result.txt', 'w') as result:
         for i in range(len(accession_id)) :
@@ -24,6 +27,7 @@ def filtrate_Link (accession_id) :   #used to filter the FTTP link in a link tha
                 if data_2[index]['fileType'] == 'RESULT':
                     result.write(data_2[index]['downloadLink'] + '\n')
     print ('Finished filtrate work.')
+
 
 if __name__=='__main__':
     url = 'http://www.ebi.ac.uk:80/pride/ws/archive/project/list?show=1000&page=1&order=desc'

@@ -8,6 +8,8 @@ Created on Tue Apr 17 13:52:06 2018
 import csv
 
 list_file = []
+
+
 def loadCSVfile(csv_name):
    with open(csv_name,'r') as csv_file :
        for each_line in csv_file.readlines() :

@@ -4,12 +4,14 @@ Created on Sun Apr 15 17:28:20 2018
 
 @author: 兽兽
 """
-def fasta_split(fa_in) : #Separate the name and sequence from the fasta file.
-        fa_Name = []  #Defines a list for storing information about a sequence.
-        fa_Seq = [] #Define a column to define a list for storing sequences.
+
+
+def fasta_split(fa_in) :  # Separate the name and sequence from the fasta file.
+        fa_Name = []  # Defines a list for storing information about a sequence.
+        fa_Seq = [] # Define a column to define a list for storing sequences.
         fa_Num = -1
         for line in fa_in.readlines() :
-            if line[0] == ">":  #If it is a message row, it is stored in fa_Name, otherwise it is stored in fa_Seq.
+            if line[0] == ">":  # If it is a message row, it is stored in fa_Name, otherwise it is stored in fa_Seq.
                line = line.rstrip()
                fa_Name.append(line)
                fa_Num = fa_Num + 1
@@ -18,7 +20,8 @@ def fasta_split(fa_in) : #Separate the name and sequence from the fasta file.
                fa_Seq[fa_Num] = fa_Seq[fa_Num] + line
         return fa_Name,fa_Seq
 
-def fasta_dic(fa_Name,fa_Seq,fasta = []) : #Combines the renamed sequence name and the original sequence into a new dictionary.      
+
+def fasta_dic(fa_Name,fa_Seq,fasta = []) : # Combines the renamed sequence name and the original sequence into a new dictionary.
     Number = 1
     C = fasta[-2]
     digit = fasta[-1]
@@ -30,8 +33,9 @@ def fasta_dic(fa_Name,fa_Seq,fasta = []) : #Combines the renamed sequence name a
     sequences = dict()
     sequences =dict(zip(fa_Name,fa_Seq))
     return sequences
-    
-def fasta_out(name_in,sequences) : #Output the dictionary to the new fasta file.
+
+
+def fasta_out(name_in,sequences) : # Output the dictionary to the new fasta file.
     mark = name_in.find('.')
     name_out = name_in[:mark] + '3.2' + name_in[mark:]
     fa_out = open(name_out,'w')
@@ -39,7 +43,8 @@ def fasta_out(name_in,sequences) : #Output the dictionary to the new fasta file.
         fa_out.write(key + '\n' + str(sequences[key]))
     return name_out
 
-def Rename_seqⅡ(fasta = []) :#Apply the above three functions together.
+
+def Rename_seqⅡ(fasta = []) :# Apply the above three functions together.
     import os
     import shutil
     os.mkdir('result_fasta')
@@ -50,7 +55,8 @@ def Rename_seqⅡ(fasta = []) :#Apply the above three functions together.
         sequences = fasta_dic(fa_Name,fa_Seq,fasta)
         name_out = fasta_out(name_in,sequences)
         shutil.move(name_out,'result_fasta')
-            
+
+
 if __name__=='__main__':
     fasta = ['oral.fasta','swiss prot_mouse.fasta', 'rename','%06d']
     Rename_seqⅡ(fasta)
