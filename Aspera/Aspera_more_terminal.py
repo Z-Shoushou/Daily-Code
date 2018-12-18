@@ -173,10 +173,12 @@ def re_download(cmd,floder):
 
 
 def remote_copy(floder,remote_path):
-    print("Start remote copy to your prescribed route. ")
-    print("rsync -avzu --progress " + str(floder) + " " + str(remote_path))
-    os.popen("rsync -avzu --progress " + floder + " " + remote_path)
-    print("Prescribed route successfully.")
+    print("Start remote copy to your prescribed route and remove the project file in datanode terminal. ")
+    print("scp -rC " + str(floder) + " " + str(remote_path))
+    os.popen("scp -rC " + floder + " " + remote_path)
+    print("rm -r " + str(floder))
+    os.popen("rm -r " + floder)
+
 
 
 if __name__ == '__main__':
