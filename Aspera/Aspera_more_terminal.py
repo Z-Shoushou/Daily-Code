@@ -56,7 +56,7 @@ def number_download(project_number):
     floder = url[-9:] # Project number
     mkpath = Store_address + floder  # The floder address where the file is stored
     mkdir(mkpath)
-    DownloadLink,FileSize = get_link(url)
+    DownloadLink, FileSize = get_link(url)
     cmd = tansform(DownloadLink, floder)
     command_download(cmd, floder, FileSize)
     print("Project " + url[-9:] + " download has been finished.")
@@ -84,10 +84,10 @@ def file_download(project_file) :
         floder = urls[i][-10:-1]
         mkpath = Store_address+ floder
         mkdir(mkpath)
-        DownloadLink,FileSize = get_link(urls[i])
+        DownloadLink, FileSize = get_link(urls[i])
         cmd = tansform(DownloadLink, floder)
         command_download(cmd, floder, FileSize)
-        print("Project " + urls[i][-10:-1] + " download has been finished.\n")
+        print ("Project " + urls[i][-10:-1] + " download has been finished.\n")
         remote_copy(floder, remote_path)
 
 
@@ -95,7 +95,7 @@ def mkdir(path):
     # Make the dir for each project and store the data file in it .
     isExists = os.path.exists(path)
     if not isExists:
-        print(path + ' creating successfully.\n')
+        print (path + ' creating successfully.\n')
         os.makedirs(path)
         return True
     else:
@@ -116,7 +116,7 @@ def get_link (url):
             DownloadLink.append(data_1[i]['asperaDownloadLink'])
             FileSize.append(data_1[i]['fileSize'])
     print("Web data ande download link have been handed.")
-    return DownloadLink,FileSize
+    return DownloadLink, FileSize
 
 
 def tansform (DownloadLink,floder):
@@ -133,7 +133,7 @@ def tansform (DownloadLink,floder):
 def command_download (cmd,floder,FileSize) :
     # Visit the system command line use Aspera to download the data .
     for (i, j) in zip(cmd, FileSize):
-        print(i)
+        print (i)
         size = float(j)
         print ("Estimate transmission completion in " + str(math.ceil(size/2100000)) + " seconds.(Start time : "
                + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ")")
@@ -146,7 +146,7 @@ def command_download (cmd,floder,FileSize) :
             re_download(i, floder)
 
 
-def re_download(cmd,floder):
+def re_download(cmd, floder):
     # When get the fail download try five times to re_download .
     print("Trying the first time re-download.")
     output = os.popen(cmd, "r")
@@ -162,8 +162,8 @@ def re_download(cmd,floder):
             note = output.read()
             print(note)
             if number == 100:
-                print("Have been retried for 100 times,re-download fail. "
-                      "Fail download note had been wrote in Error note.txt")
+                print ("Have been retried for 100 times,re-download fail. "
+                       "Fail download note had been wrote in Error note.txt")
                 with open(Store_address + str(floder) + " Error note.txt", "w") as f:
                     f.write(cmd)
                     f.write(note)
@@ -178,7 +178,6 @@ def remote_copy(floder,remote_path):
     os.popen("scp -rC " + floder + " " + remote_path)
     print("rm -r " + str(floder))
     os.popen("rm -r " + floder)
-
 
 
 if __name__ == '__main__':

@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding:utf-8 -*-
+
 """
 Usage:
     Aspera.py [-vrh] (-nProject_number>|-f<Project_file>) -t<File_type>
@@ -28,7 +31,7 @@ import os
 import time
 import math
 
-parameter = r"nophup /usr/zhanghf/.aspera/connect/bin/ascp -QT -l 500m -k1 -P33001 -i  /usr/zhanghf/.aspera/connect/etc/asperaweb_id_dsa.openssh"
+parameter = r"nohup /usr/zhanghf/.aspera/connect/bin/ascp -QT -l 500m -k1 -P33001 -i  /usr/zhanghf/.aspera/connect/etc/asperaweb_id_dsa.openssh"
 Store_address = "./"
 
 
@@ -59,7 +62,6 @@ def number_download(project_number):
     cmd = tansform(DownloadLink,floder)
     command_download(cmd,floder,FileSize)
     print("Project " + url[-9:] + " download has been finished.")
-    remote_copy(floder, remote_path)
 
 
 def file_handling (project_file):
