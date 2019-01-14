@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding:utf-8 -*-
+
 """
 Usage:
     Aspera.py [-vrh] (-nProject_number>|-f<Project_file>) -t<File_type>
@@ -25,9 +28,11 @@ from docopt import docopt
 import requests
 import json as js
 import os
+import time
+import math
 
-parameter = r"ascp -QT -l 500m -k1 -P33001 -i C:/Users/Shoushou/ssh.ssh/asperaweb_id_dsa.openssh"
-Store_address = "C:/Users/Shoushou/biostar/aspera/"
+parameter = r"nohup /usr/zhanghf/.aspera/connect/bin/ascp -QT -l 500m -k1 -P33001 -i  /usr/zhanghf/.aspera/connect/etc/asperaweb_id_dsa.openssh"
+Store_address = "./"
 
 
 def project_judge(arguments):
@@ -57,7 +62,6 @@ def number_download(project_number):
     cmd = tansform(DownloadLink,floder)
     command_download(cmd,floder,FileSize)
     print("Project " + url[-9:] + " download has been finished.")
-    remote_copy(floder, remote_path)
 
 
 def file_handling (project_file):
@@ -128,7 +132,7 @@ def tansform (DownloadLink,floder):
 
 def command_download (cmd,floder,FileSize) :
     # Visit the system command line use Aspera to download the data .
-    for (i, j) in zip(cmd, FileSize) :
+    for (i,j) in zip(cmd,FileSize) :
         print (i)
         size = float(j)
         print ("Estimate transmission completion in " + str(math.ceil(size/2100000)) + " seconds.(Start time : "
