@@ -130,7 +130,7 @@ def tansform (DownloadLink,floder):
     return cmd
 
 
-def command_download (cmd,floder,FileSize) :
+def command_download (cmd, floder, FileSize) :
     # Visit the system command line use Aspera to download the data .
     for (i,j) in zip(cmd,FileSize) :
         print (i)
@@ -140,13 +140,26 @@ def command_download (cmd,floder,FileSize) :
         print ("Downloading project file...")
         output = os.popen(i, "r")
         note = str(output.read())
-        print (note)
         if "Session Stop" in note:
-            print("Trying download the data again(A hundred times at most).")
-            re_download(i,floder)
+            fail_judge(cmd, note, i, floder)
+        else:
+            print(note)
 
 
-def re_download(cmd,floder):
+def fail_judge(cmd, note, i, floder):
+    # Judge the fail reason. If no such file or directory exit then pass to download it .
+    if "Session Stop  (Error: Server aborted session: No such file or directory)" in note:
+        print ("Error: Server aborted session: No such file or directory")
+        with open(Store_address + str(floder) + " Error note.txt", "w") as f:
+            f.write(cmd)
+            f.write(note)
+            f.write("\n")
+    elif "Session Stop" in note:
+        print("Trying download the data again(A hundred times at most).")
+        re_download(i, floder)
+
+
+def re_download(cmd, floder):
     # When get the fail download try five times to re_download .
     print("Trying the first time re-download.")
     output = os.popen(cmd, "r")

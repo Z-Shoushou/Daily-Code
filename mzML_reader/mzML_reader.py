@@ -16,11 +16,9 @@ Options:
     -q, --quite Sel     quite mode
     -r                  make report
     -f <Project_file>,--file <Project_file>              project number file
-    -t <File_type>,--type <File_type>                     project file type
 
 Example
-    Aspera.py -v -n PXD003452 -t REQUEST
-    Aspera.py -f test.txt -t REASULT,OTHER
+    mzML_reader.py -v -f
 """
 
 from docopt import docopt

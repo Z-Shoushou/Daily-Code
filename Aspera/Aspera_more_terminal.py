@@ -119,7 +119,7 @@ def get_link (url):
     return DownloadLink, FileSize
 
 
-def tansform (DownloadLink,floder):
+def tansform (DownloadLink, floder):
     # Transform the link into windows cmd commend.
     print("Getting the download command prompt...")
     cmd = []
@@ -130,20 +130,33 @@ def tansform (DownloadLink,floder):
     return cmd
 
 
-def command_download (cmd,floder,FileSize) :
+def command_download(cmd, floder, FileSize):
     # Visit the system command line use Aspera to download the data .
     for (i, j) in zip(cmd, FileSize):
-        print (i)
+        print(i)
         size = float(j)
-        print ("Estimate transmission completion in " + str(math.ceil(size/2100000)) + " seconds.(Start time : "
+        print("Estimate transmission completion in " + str(math.ceil(size/2100000)) + " seconds.(Start time : "
                + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ")")
-        print ("Downloading project file...")
+        print("Downloading project file...")
         output = os.popen(i, "r")
         note = str(output.read())
-        print (note)
         if "Session Stop" in note:
-            print("Trying download the data again(A hundred times at most).")
-            re_download(i, floder)
+            fail_judge(cmd, note, i, floder)
+        else:
+            print(note)
+
+
+def fail_judge(cmd, note, i, floder):
+    # Judge the fail reason. If no such file or directory exit then pass to download it .
+    if "Session Stop  (Error: Server aborted session: No such file or directory)" in note:
+        print("Error: Server aborted session: No such file or directory")
+        with open(Store_address + str(floder) + " Error note.txt", "w") as f:
+            f.write(str(cmd))
+            f.write(note)
+            f.write("\n")
+    elif "Session Stop" in note:
+        print("Trying download the data again(A hundred times at most).")
+        re_download(i, floder)
 
 
 def re_download(cmd, floder):
@@ -165,14 +178,14 @@ def re_download(cmd, floder):
                 print ("Have been retried for 100 times,re-download fail. "
                        "Fail download note had been wrote in Error note.txt")
                 with open(Store_address + str(floder) + " Error note.txt", "w") as f:
-                    f.write(cmd)
+                    f.write(str(cmd))
                     f.write(note)
                     f.write("\n")
         except Exception:
             break
 
 
-def remote_copy(floder,remote_path):
+def remote_copy(floder, remote_path):
     print("Start remote copy to your prescribed route and remove the project file in datanode terminal. ")
     print("scp -rC " + str(floder) + " " + str(remote_path))
     os.popen("scp -rC " + floder + " " + remote_path)
